@@ -1,14 +1,7 @@
 #!/bin/bash
 set -eu
 
-case "$OSTYPE" in
-  linux*)
-    echo "Configuring for Ubuntu"
-
-    echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
-    echo ${user_pass} | base64 -d > /etc/openvpn/login.conf
-
-    cat <<EOF > /etc/openvpn/client.conf
+    cat <<EOF > client.ovpn
 client
 dev tun
 route-nopull
@@ -30,6 +23,15 @@ auth-user-pass login.conf
 reneg-sec 0
 EOF
 
+case "$OSTYPE" in
+  linux*)
+    echo "Configuring for Ubuntu"
+
+    echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
+    echo ${user_pass} | base64 -d > /etc/openvpn/login.conf
+
+    sudo cp client.ovpn /etc/openvpn/client.conf
+
     service openvpn start client > /dev/null 2>&1
     sleep 5
     echo nameserver ${dns1} | sudo tee /etc/resolv.conf
@@ -49,7 +51,7 @@ EOF
     echo ${ca_crt} | base64 -D -o ca.crt > /dev/null 2>&1
     echo ${user_pass} | base64 -D -o login.conf > /dev/null 2>&1
 
-    sudo openvpn --client --route-nopull --route ${subnet1} 255.255.224.0 --route ${subnet2} 255.255.224.0 --dhcp-option DNS ${dns1} --dhcp-option DNS ${dns2} --dev tun --proto ${proto} --remote ${host} ${port} --remote-random-hostname --resolv-retry infinite --nobind --persist-key --persist-tun --remote-cert-tls server --ca ca.crt --verb 3 --auth-user-pass login.conf --reneg-sec 0 > /dev/null 2>&1 &
+    sudo openvpn --config client.ovpn &> $BITRISE_DEPLOY_DIR/logs.txt &
     echo nameserver ${dns1} | sudo tee /etc/resolv.conf
     echo nameserver ${dns2} | sudo tee -a /etc/resolv.conf
 
