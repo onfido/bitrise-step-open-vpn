@@ -71,6 +71,8 @@ case "$OSTYPE" in
     ;;
 esac
 
-ping -c4 ${dns1}
-ping -c4 ${dns2}
+netstat -nr
+
 nslookup google.com
+dig google.com
+
