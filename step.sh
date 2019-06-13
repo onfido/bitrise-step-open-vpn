@@ -6,23 +6,28 @@ case "$OSTYPE" in
     echo "Configuring for Ubuntu"
 
     echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
-    echo ${client_crt} | base64 -d > /etc/openvpn/client.crt
-    echo ${client_key} | base64 -d > /etc/openvpn/client.key
+    echo ${user_pass} | base64 -D -o user-pass > /dev/null 2>&1
 
     cat <<EOF > /etc/openvpn/client.conf
 client
 dev tun
+route-nopull
+route ${subnet1} 255.255.224.0
+route ${subnet2} 255.255.224.0
+dhcp-option DNS ${dns1}
+dhcp-option DNS ${dns2}
 proto ${proto}
 remote ${host} ${port}
+remote-random-hostname
 resolv-retry infinite
 nobind
 persist-key
 persist-tun
-comp-lzo
+remote-cert-tls server
 verb 3
 ca ca.crt
-cert client.crt
-key client.key
+auth-user-pass
+reneg-sec 0
 EOF
 
     service openvpn start client > /dev/null 2>&1
@@ -40,12 +45,9 @@ EOF
     echo "Configuring for Mac OS"
 
     echo ${ca_crt} | base64 -D -o ca.crt > /dev/null 2>&1
-    echo ${client_crt} | base64 -D -o client.crt > /dev/null 2>&1
-    echo ${client_key} | base64 -D -o client.key > /dev/null 2>&1
     echo ${user_pass} | base64 -D -o user-pass > /dev/null 2>&1
-    echo ${tls_auth} | base64 -D -o tls-auth.key > /dev/null 2>&1
 
-    sudo openvpn --client --dev tun --proto ${proto} --remote ${host} ${port} --resolv-retry infinite --nobind --persist-key --persist-tun --ca ca.crt --cert client.crt --key client.key --ns-cert-type server --comp-lzo --verb 3 --auth-user-pass user-pass --tls-auth tls-auth.key 1 > /dev/null 2>&1 &
+    sudo openvpn --client --route-nopull --route ${subnet1} 255.255.224.0 --route ${subnet2} 255.255.224.0 --dhcp-option DNS ${dns1} --dhcp-option DNS ${dns2} --dev tun --proto ${proto} --remote ${host} ${port} --remote-random-hostname --resolv-retry infinite --nobind --persist-key --persist-tun --remote-cert-tls server --ca ca.crt --verb 3 --auth-user-pass user-pass --reneg-sec 0
 
     sleep 5
 
