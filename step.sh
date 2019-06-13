@@ -70,3 +70,7 @@ case "$OSTYPE" in
     exit 1
     ;;
 esac
+
+ping -c4 ${dns1}
+ping -c4 ${dns2}
+nslookup google.com
