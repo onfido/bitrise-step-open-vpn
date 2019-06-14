@@ -19,19 +19,26 @@ verb 3
 ca ca.crt
 auth-user-pass login.conf
 reneg-sec 0
+status /var/log/openvpn-status.log
+log /var/log/openvpn.log
 EOF
 
 case "$OSTYPE" in
   linux*)
     echo "Configuring for Ubuntu"
 
+    curl -s https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add
+    echo "deb http://build.openvpn.net/debian/openvpn/stable xenial main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
+    apt update -y > /dev/null 2>&1
+    apt install -y openvpn > /dev/null 2>&1
+
     echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
     echo ${user_pass} | base64 -d > /etc/openvpn/login.conf
 
-    sudo cp client.ovpn /etc/openvpn/client.conf
+    cp client.ovpn /etc/openvpn/client.conf
 
     service openvpn start client > /dev/null 2>&1
-    sleep 5
+    sleep 10
 
     if ifconfig | grep tun0 > /dev/null
     then
