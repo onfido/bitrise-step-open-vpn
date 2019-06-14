@@ -51,7 +51,7 @@ case "$OSTYPE" in
     echo ${ca_crt} | base64 -D -o ca.crt > /dev/null 2>&1
     echo ${user_pass} | base64 -D -o login.conf > /dev/null 2>&1
 
-    sudo openvpn --config client.ovpn > /dev/null 2>&1
+    sudo openvpn --config client.ovpn > /dev/null 2>&1 &
     sleep 5
     echo nameserver ${dns1} | sudo tee /etc/resolv.conf
     echo nameserver ${dns2} | sudo tee -a /etc/resolv.conf
