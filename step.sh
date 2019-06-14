@@ -19,9 +19,8 @@ verb 3
 ca ca.crt
 auth-user-pass login.conf
 reneg-sec 0
-cipher AES-256-GCM
 status /var/log/openvpn-status.log
-log  /var/log/openvpn.log
+log /var/log/openvpn.log
 EOF
 
 case "$OSTYPE" in
@@ -44,11 +43,7 @@ case "$OSTYPE" in
     sudo cp client.ovpn /etc/openvpn/client.conf
 
     service openvpn start client > /dev/null 2>&1
-    sleep 10
-
-    cat /var/log/openvpn-status.log
-    cat /var/log/openvpn.log
-
+    sleep 5
 
     if ifconfig | grep tun0 > /dev/null
     then
