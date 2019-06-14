@@ -7,8 +7,6 @@ dev tun
 route-nopull
 route ${subnet1} 255.255.224.0
 route ${subnet2} 255.255.224.0
-dhcp-option DNS ${dns1}
-dhcp-option DNS ${dns2}
 proto ${proto}
 remote ${host} ${port}
 remote-random-hostname
@@ -34,8 +32,6 @@ case "$OSTYPE" in
 
     service openvpn start client > /dev/null 2>&1
     sleep 5
-    echo nameserver ${dns1} | sudo tee /etc/resolv.conf
-    echo nameserver ${dns2} | sudo tee -a /etc/resolv.conf
 
     if ifconfig | grep tun0 > /dev/null
     then
@@ -53,8 +49,6 @@ case "$OSTYPE" in
 
     sudo openvpn --config client.ovpn > /dev/null 2>&1 &
     sleep 5
-    echo nameserver ${dns1} | sudo tee /etc/resolv.conf
-    echo nameserver ${dns2} | sudo tee -a /etc/resolv.conf
 
     if ifconfig -l | grep utun0 > /dev/null
     then
@@ -69,6 +63,3 @@ case "$OSTYPE" in
     exit 1
     ;;
 esac
-
-nslookup google.com
-dig google.com

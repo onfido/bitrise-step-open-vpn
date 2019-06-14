@@ -93,17 +93,3 @@ inputs:
       is_expand: true
       is_required: true
       is_sensitive: false
-  - dns1: "$DNS1"
-    opts:
-      title: "A Nameserver"
-      summary: "A Nameserver"
-      is_expand: true
-      is_required: true
-      is_sensitive: false
-  - dns2: "$DNS2"
-    opts:
-      title: "A Nameserver"
-      summary: "A Nameserver"
-      is_expand: true
-      is_required: true
-      is_sensitive: false
