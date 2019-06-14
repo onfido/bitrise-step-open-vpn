@@ -34,7 +34,11 @@ case "$OSTYPE" in
     sudo cp client.ovpn /etc/openvpn/client.conf
 
     service openvpn start client > /dev/null 2>&1
-    sleep 5
+    sleep 10
+
+    cat /var/log/openvpn-status.log
+    cat /var/log/openvpn.log
+
 
     if ifconfig | grep tun0 > /dev/null
     then
