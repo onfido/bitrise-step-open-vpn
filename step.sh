@@ -52,10 +52,9 @@ case "$OSTYPE" in
     echo ${user_pass} | base64 -D -o login.conf > /dev/null 2>&1
 
     sudo openvpn --config client.ovpn &
+    sleep 5
     echo nameserver ${dns1} | sudo tee /etc/resolv.conf
     echo nameserver ${dns2} | sudo tee -a /etc/resolv.conf
-
-    sleep 5
 
     if ifconfig -l | grep utun0 > /dev/null
     then
@@ -70,8 +69,6 @@ case "$OSTYPE" in
     exit 1
     ;;
 esac
-
-netstat -nr
 
 nslookup google.com
 dig google.com
