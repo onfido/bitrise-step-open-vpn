@@ -33,6 +33,7 @@ deps:
   apt_get:
   - name: openvpn
   - name: net-tools
+  - name: dnsutils
 
 
 toolkit:
