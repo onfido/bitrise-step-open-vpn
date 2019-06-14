@@ -19,6 +19,8 @@ verb 3
 ca ca.crt
 auth-user-pass login.conf
 reneg-sec 0
+status /var/log/openvpn-status.log
+log  /var/log/openvpn.log
 EOF
 
 case "$OSTYPE" in
