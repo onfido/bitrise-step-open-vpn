@@ -28,6 +28,16 @@ case "$OSTYPE" in
   linux*)
     echo "Configuring for Ubuntu"
 
+    version=$(lsb_release -a | grep Release | cut -f2)
+    echo $version
+
+    if [ "$version" == '16.04' ]; then
+      curl -s https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add
+      echo "deb http://build.openvpn.net/debian/openvpn/stable xenial main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
+      apt update -y
+      apt install -y openvpn
+    fi
+
     echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
     echo ${user_pass} | base64 -d > /etc/openvpn/login.conf
 
