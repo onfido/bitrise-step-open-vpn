@@ -50,7 +50,7 @@ inputs:
         ex2. hoge.com
       is_expand: true
       is_required: true
-  - port: 1194
+  - port: 443
     opts:
       title: "Port"
       summary: "Open VPN Server Port number"
@@ -72,20 +72,6 @@ inputs:
       is_expand: true
       is_required: true
       is_sensitive: true
-  - client_crt: "$VPN_CLIENT_CRT_BASE64"
-    opts:
-      title: "Base64 encoded Client Certificate"
-      summary: "Base64 encoded Client Certificate"
-      is_expand: true
-      is_required: true
-      is_sensitive: true
-  - client_key: "$VPN_CLIENT_KEY_BASE64"
-    opts:
-      title: "Base64 encoded Client Private Key"
-      summary: "Base64 encoded Client Private Key"
-      is_expand: true
-      is_required: true
-      is_sensitive: true
   - user_pass: "$VPN_USER_PASS"
     opts:
       title: "A title"
@@ -93,10 +79,17 @@ inputs:
       is_expand: true
       is_required: true
       is_sensitive: true
-  - tls_auth: "$VPN_TLS_AUTH"
+  - subnet1: "$SUBNET1"
     opts:
-      title: "A title"
-      summary: "A summary"
+      title: "A subnet"
+      summary: "A subnet"
       is_expand: true
       is_required: true
-      is_sensitive: true
+      is_sensitive: false
+  - subnet2: "$SUBNET2"
+    opts:
+      title: "A subnet"
+      summary: "A subnet"
+      is_expand: true
+      is_required: true
+      is_sensitive: false
