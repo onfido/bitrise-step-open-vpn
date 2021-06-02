@@ -27,8 +27,9 @@ case "$OSTYPE" in
   linux*)
     echo "Configuring for Ubuntu"
 
+    export APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
     curl -s https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add
-    echo "deb http://build.openvpn.net/debian/openvpn/stable xenial main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
+    echo "deb http://build.openvpn.net/debian/openvpn/stable focal main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
     apt update -y > /dev/null 2>&1
     apt install -y openvpn > /dev/null 2>&1
 
