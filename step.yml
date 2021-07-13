@@ -30,10 +30,10 @@ run_if: ""
 deps:
   brew:
   - name: openvpn
-  apt_get:
-  - name: openvpn
-  - name: net-tools
-  - name: dnsutils
+  # apt_get:
+  # - name: openvpn
+  # - name: net-tools
+  # - name: dnsutils
 
 
 toolkit:

@@ -29,8 +29,9 @@ case "$OSTYPE" in
 
     curl -s https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add
     echo "deb http://build.openvpn.net/debian/openvpn/stable xenial main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
+    rm -f /etc/apt/sources.list.d/github_git-lfs.list*
     apt update -y > /dev/null 2>&1
-    apt install -y openvpn > /dev/null 2>&1
+    apt install -y net-tools openvpn dnsutils > /dev/null 2>&1
 
     echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
     echo ${user_pass} | base64 -d > /etc/openvpn/login.conf
