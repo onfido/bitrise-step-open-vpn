@@ -29,9 +29,12 @@ case "$OSTYPE" in
 
     export APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
     curl -s https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add
+    # Remove nodesource from the repo list since it was causing some cert errors and not needed anyway.
+    mv /etc/apt/sources.list.d/nodesource.list /etc/apt/sources.list.d/nodesource.list.disabled || true
+
     echo "deb http://build.openvpn.net/debian/openvpn/stable focal main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
-    apt update -y > /dev/null 2>&1
-    apt install -y openvpn > /dev/null 2>&1
+    apt update -y
+    apt install -y net-tools dnsutils openvpn
 
     echo ${ca_crt} | base64 -d > /etc/openvpn/ca.crt
     echo ${user_pass} | base64 -d > /etc/openvpn/login.conf
